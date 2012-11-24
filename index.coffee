@@ -8,6 +8,9 @@ registration = (mimosaConfig, register) ->
 _importSource = (mimosaConfig, options, next) ->
 
   console.log "importing source"
+  console.log JSON.stringify(mimosaConfig.importSource, null, 2)
+
+  # error when file from orig project is edited in dest project
 
   next()
 
