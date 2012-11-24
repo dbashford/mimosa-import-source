@@ -1,24 +1,25 @@
 {
   "name": "mimosa-import-source",
   "preferGlobal": "false",
-  "version": "0.0.1",
-  "homepage": "http://www.mimosajs.com <= OR PUT YOUR GITHUB/WEBSITE",
-  "author": "YOUR NAME HERE",
-  "description": "DESCRIBE YOUR MODULE",
+  "version": "0.1.0",
+  "homepage": "https://github.com/dbashford/mimosa-import-source",
+  "author": "David Bashford",
+  "description": "Mimosa module for copying files into the project before building starts",
   "contributors": [
     {
-      "name": "YOUR NAME",
-      "email": "YOUR EMAIL"
+      "name": "David Bashford",
+      "email": "dbashford@hotmail.com"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "YOUR REPO URL"
+    "url": "https://github.com/dbashford/mimosa-import-source"
   },
   "keywords": [
     "mimosa",
     "mmodule",
-    "ADD MORE KEYWORDS TO HELP PEOPLE FIND YOUR MODULE ON NPM"
+    "copy",
+    "import"
   ],
   "dependencies": {
     "logmimosa": "0.2.1"
