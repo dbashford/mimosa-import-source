@@ -53,6 +53,29 @@ exports.validate = (config) ->
               else
                 errors.push "importSource.copy entries must have a to property."
 
+              if c.from?
+                if c.exclude?
+                  if Array.isArray(c.exclude)
+                    regexes = []
+                    newExclude = []
+                    for exclude in c.exclude
+                      if typeof exclude is "string"
+                        newExclude.push __determinePath exclude, c.from
+                      else if exclude instanceof RegExp
+                        regexes.push exclude.source
+                      else
+                        errors.push "importSource.copy.exclude must be an array of strings and/or regexes."
+                        break
+
+                    if regexes.length > 0
+                      c.excludeRegex = new RegExp regexes.join("|"), "i"
+
+                    c.exclude = newExclude
+                  else
+                    errors.push "importSource.copy.exclude must be an array."
+                else
+                  c.excludeRegex = new RegExp /(^[.#]|(?:__|~)$)/
+
             else
               errors.push "importSource.copy must be an array of objects"
               break

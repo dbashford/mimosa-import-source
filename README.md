@@ -17,6 +17,8 @@ When Mimosa starts up, and before it begins handling your code during the initia
 
 After Mimosa is started, this module will continue watching the files at their original locations and copy them in as they change.
 
+If you attempt to modify a file that has been copied, rather than update the original file, the module will warn you that you may lose your edits.
+
 ## Default Config
 
 ```
@@ -34,10 +36,7 @@ If this module had a default config placeholder like other Mimosa modules, it wo
       {
         from:""
         to:""
-      },
-      {
-        from:""
-        to:""
+        exclude:[/(^[.#]|(?:__|~)$)/]
       }
     ]
   ]
@@ -46,4 +45,4 @@ If this module had a default config placeholder like other Mimosa modules, it wo
 * `copy`: an array of source importing configurations
 * `from`: a string, path of the files you'd like to import into your project. Can be a file, or a folder.  If a folder, all the contents of the folder (recursive) will be copied. Path can be relative to the root of the project or absolute.
 * `to`: a string, location in your project where the folder or file will be copied. Path can be relative to the root of the project or absolute. The path need not exist.
-
+* `exclude`: an array of strings and/or regexs. Files from the `from` location to exclude from moving to the `to` location. Strings are paths and can be relative to the from, or be absolute. The path need not exist. If you do not provide an exclude, this is used: `[/(^[.#]|(?:__|~)$)/]` which excludes things like dot files and emacs temp files.

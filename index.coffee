@@ -15,10 +15,10 @@ logger = require 'logmimosa'
 config = require './config'
 
 registration = (mimosaConfig, register) ->
-  register ['beforeBuild'], 'init', _importSource
+  register ['preBuild'], 'init', _importSource
 
-  #if mimosaConfig.isClean
-  #  register ['buildDone'], 'init', _clean
+  if mimosaConfig.isClean
+    register ['postClean'], 'init', _clean
 
 _do = (mimosaConfig, execute, next) ->
   if mimosaConfig.importSource?.copy?.length > 0
@@ -42,8 +42,8 @@ _cleanImports = (copyConfig, cb) ->
   fs.exists copyConfig.to, (exists) ->
     if exists
       allFiles = wrench.readdirSyncRecursive(copyConfig.from).map (f) -> path.join copyConfig.from, f
-      files = allFiles.filter (f) -> fs.statSync(path.join(copyConfig.from, f)).isFile()
-      dirs =  allFiles.filter (f) -> fs.statSync(path.join(copyConfig.from, f)).isDirectory()
+      files = allFiles.filter (f) -> _isExcluded(copyConfig, f)
+      dirs =  allFiles.filter (f) -> fs.statSync(f).isDirectory()
 
       for file in files
         outPath = _makeToPath file, copyConfig.from, copyConfig.to
@@ -64,11 +64,24 @@ _cleanImports = (copyConfig, cb) ->
 _initCopy = (copyConfig, cb) ->
   numFiles = if copyConfig.isDirectory
     files = wrench.readdirSyncRecursive(copyConfig.from).filter (f) ->
-      fs.statSync(path.join(copyConfig.from, f)).isFile()
+      f = path.join copyConfig.from, f
+      not _isExcluded(copyConfig, f) and fs.statSync(f).isFile()
     files.length
   else
     1
-  _startCopy copyConfig, numFiles, cb
+
+  if numFiles is 0
+    cb()
+  else
+    _startCopy copyConfig, numFiles, cb
+
+_isExcluded = (copyConfig, file) ->
+  if copyConfig.excludeRegex and file.match copyConfig.excludeRegex
+    true
+  else if copyConfig.exclude?.indexOf(file) > -1
+    true
+  else
+    false
 
 _startCopy = (copyConfig, howManyFiles, cb) ->
 
@@ -78,7 +91,9 @@ _startCopy = (copyConfig, howManyFiles, cb) ->
       # error when file from orig project is edited in dest project
       _protectDestination copyConfig, howManyFiles, cb
 
-  watcher = watch.watch(copyConfig.from, {persistent:true})
+  ignored = (file) -> _isExcluded(copyConfig, file)
+
+  watcher = watch.watch(copyConfig.from, {ignored:ignored, persistent:true})
   watcher.on "error", (error) ->
     logger.warn "File watching error: #{error}"
     done()
@@ -115,6 +130,10 @@ _checkForEdit = (file, copyConfig) ->
       logger.debug "mimosa-import-source: file changed in 'to' directory does not exist in 'from' source"
 
 _copy = (file, copyConfig, cb) ->
+  if fs.statSync(file).isDirectory()
+    cb() if cb
+    return
+
   # if cb then is add, determine if add needed
   fs.readFile file, (err, data) ->
     if err
