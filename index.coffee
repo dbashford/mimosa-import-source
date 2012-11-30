@@ -38,12 +38,13 @@ __do = (mimosaConfig, execute, next) ->
     next()
 
 __cleanFiles = (copyConfig, cb) ->
-  console.log copyConfig
-  console.log cb
   fs.exists copyConfig.to, (exists) ->
     return cb() unless exists
 
-    allFiles = wrench.readdirSyncRecursive(copyConfig.from).map (f) -> path.join copyConfig.from, f
+    allFiles = if copyConfig.isDirectory
+      wrench.readdirSyncRecursive(copyConfig.from).map (f) -> path.join copyConfig.from, f
+    else
+      [copyConfig.from]
     files = allFiles.filter (f) -> not __isExcluded(copyConfig, f) and fs.statSync(f).isFile()
 
     for file in files
@@ -57,6 +58,7 @@ __cleanFiles = (copyConfig, cb) ->
 __cleanDirectories = (copyConfig, cb) ->
   fs.exists copyConfig.to, (exists) ->
     return cb() unless exists
+    return cb() unless copyConfig.isDirectory
 
     allFiles = wrench.readdirSyncRecursive(copyConfig.from).map (f) -> path.join copyConfig.from, f
     dirs =  allFiles.filter (f) -> fs.statSync(f).isDirectory()
