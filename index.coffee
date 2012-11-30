@@ -9,7 +9,11 @@ _ = require "lodash"
 
 config = require './config'
 
+isBuild = false
+
 registration = (mimosaConfig, register) ->
+  isBuild = mimosaConfig.isBuild
+
   register ['preBuild'], 'init', _importSource
 
   if mimosaConfig.isClean
@@ -103,11 +107,14 @@ __startCopy = (copyConfig, howManyFiles, cb) ->
   done = ->
     if ++i is howManyFiles
       # error when file from orig project is edited in dest project
-      __protectDestination copyConfig, howManyFiles, cb
+      if isBuild
+        cb()
+      else
+        __protectDestination copyConfig, howManyFiles, cb
 
   ignored = (file) -> __isExcluded(copyConfig, file)
 
-  watcher = watch.watch(copyConfig.from, {ignored:ignored, persistent:true})
+  watcher = watch.watch(copyConfig.from, {ignored:ignored, persistent:!isBuild})
   watcher.on "error", (error) ->
     logger.warn "File watching error: #{error}"
     done()
