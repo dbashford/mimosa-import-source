@@ -15,10 +15,8 @@ registration = (mimosaConfig, register) ->
   isBuild = mimosaConfig.isBuild
 
   register ['preBuild'], 'init', _importSource
-
-  if mimosaConfig.isClean
-    register ['postClean'], 'init', _cleanFiles
-    register ['postClean'], 'complete', _cleanDirectories
+  register ['postClean'], 'init', _cleanFiles
+  register ['postClean'], 'complete', _cleanDirectories
 
 _cleanFiles = (mimosaConfig, options, next) ->
   __do mimosaConfig, __cleanFiles, next
@@ -146,7 +144,6 @@ __checkForEdit = (file, copyConfig) ->
       dstat = fs.statSync(origFile).mtime.getTime()
       if ostat - 2000 > dstat
         logger.warn "import-source: file [[ #{file} ]] changed in 'to' location directly.  These changes are likely to be overwritten."
-        console.log "File changed in dest directly!"
     else
       logger.debug "import-source: file changed in 'to' directory does not exist in 'from' source"
 
