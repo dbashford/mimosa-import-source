@@ -170,7 +170,7 @@ __copy = (file, copyConfig, cb) ->
         logger.info "File copied to destination [[ #{outFile} ]]."
       cb() if cb
 
-__delete = (file, copyConfig, cb) ->
+__delete = (file, copyConfig) ->
   outFile = __makeToPath file, copyConfig.from, copyConfig.to
   fs.exists outFile, (exists) ->
     if exists
@@ -179,9 +179,6 @@ __delete = (file, copyConfig, cb) ->
           logger.error "Error deleting file [[ #{outFile} ]], #{err}"
         else
           logger.info "File [[ #{outFile} ]] deleted."
-        cb() if cb
-    else
-      cb() if cb
 
 __makeToPath = (file, from, to) ->
   f = file.replace from, ''
