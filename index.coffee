@@ -16,7 +16,7 @@ registration = (mimosaConfig, register) ->
 
   register ['preBuild'], 'init', _importSource
   register ['postClean'], 'init', _cleanFiles
-  register ['postClean'], 'complete', _cleanDirectories
+  register ['postClean'], 'init', _cleanDirectories
 
 _cleanFiles = (mimosaConfig, options, next) ->
   __do mimosaConfig, __cleanFiles, next
