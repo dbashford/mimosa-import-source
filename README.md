@@ -39,7 +39,6 @@ If this module had a default config placeholder like other Mimosa modules, it wo
         exclude:[/(^[.#]|(?:__|~)$)/]
       }
     ]
-  ]
 ```
 
 * `copy`: an array of source importing configurations
