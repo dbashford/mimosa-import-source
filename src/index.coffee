@@ -126,7 +126,6 @@ __protectDestination = (copyConfig, howManyFiles, cb) ->
   watcher = watch.watch(copyConfig.to, {persistent:true})
   watcher.on "error", (error) ->
     logger.warn "File watching error: #{error}"
-    done()
   watcher.on "all", (dontcare, f) ->
     if initDone
       __checkForEdit f, copyConfig
