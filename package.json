@@ -1,6 +1,6 @@
 {
   "name": "mimosa-import-source",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/dbashford/mimosa-import-source",
   "author": "David Bashford",
   "description": "Mimosa module for copying files into the project before building starts",
@@ -21,7 +21,7 @@
     "import"
   ],
   "dependencies": {
-    "logmimosa": "0.4.0",
+    "logmimosa": "0.5.0",
     "chokidar": "0.6.2",
     "wrench": "1.5.1",
     "lodash": "1.2.1"
