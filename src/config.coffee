@@ -4,6 +4,8 @@ fs = require 'fs'
 
 exports.defaults = ->
   importSource:
+    interval: 500
+    binaryInterval: 1000
     copy:[]
 
 exports.placeholder = ->
@@ -11,8 +13,10 @@ exports.placeholder = ->
   \t
 
     # importSource:
-      # copy: []       # an array of folders and or files to copy and where to copy them, for
-                       # more information see https://github.com/dbashford/mimosa-import-source
+      # interval: 500         # Interval of file system polling
+      # binaryInterval: 1000  # Interval of file system polling for binary files
+      # copy: []              # an array of folders and or files to copy and where to copy them,
+                              # for more information see https://github.com/dbashford/mimosa-import-source
 
   """
 
@@ -20,6 +24,10 @@ exports.validate = (config, validators) ->
   errors = []
 
   if validators.ifExistsIsObject(errors, "importSource config", config.importSource)
+
+    validators.isNumber(errors, "importSource.interval", config.importSource.interval)
+    validators.isNumber(errors, "importSource.binaryInterval", config.importSource.binaryInterval)
+
     if config.importSource.copy?
       if validators.isArray(errors, "importSource.copy", config.importSource.copy)
         for c in config.importSource.copy

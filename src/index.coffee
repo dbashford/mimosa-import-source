@@ -9,10 +9,10 @@ _ = require "lodash"
 
 config = require './config'
 
-isBuild = false
+mimosaConf = false
 
 registration = (mimosaConfig, register) ->
-  isBuild = mimosaConfig.isBuild
+  mimosaConf = mimosaConfig
 
   register ['preBuild'], 'init', _importSource
   register ['postClean'], 'init', _cleanFiles
@@ -105,14 +105,18 @@ __startCopy = (copyConfig, howManyFiles, cb) ->
   done = ->
     if ++i is howManyFiles
       # error when file from orig project is edited in dest project
-      if isBuild
+      if mimosaConf.isBuild
         cb()
       else
         __protectDestination copyConfig, howManyFiles, cb
 
-  ignored = (file) -> __isExcluded(copyConfig, file)
+  watchSettings =
+    ignored:(file) -> __isExcluded(copyConfig, file)
+    persistent:!mimosaConf.isBuild
+    interval:mimosaConf.importSource.interval
+    binaryInterval:mimosaConf.importSource.binaryInterval
 
-  watcher = watch.watch(copyConfig.from, {ignored:ignored, persistent:!isBuild})
+  watcher = watch.watch copyConfig.from, watchSettings
   watcher.on "error", (error) ->
     logger.warn "File watching error: #{error}"
     done()
@@ -141,7 +145,7 @@ __checkForEdit = (file, copyConfig) ->
     if exists
       ostat = fs.statSync(file).mtime.getTime()
       dstat = fs.statSync(origFile).mtime.getTime()
-      if ostat - 2000 > dstat
+      if ostat - mimosaConf.importSource.interval > dstat
         logger.warn "import-source: file [[ #{file} ]] changed in 'to' location directly.  These changes are likely to be overwritten."
     else
       logger.debug "import-source: file changed in 'to' directory does not exist in 'from' source"
