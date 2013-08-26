@@ -5,7 +5,7 @@ mimosa-import-source
 
 This is a Mimosa module for copying files from somewhere on the file system into your project as the first step of a build/watch. This allows, among other things, files from other projects to merge with files from the project using this module, giving the function of a single codebase.
 
-For more information regarding Mimosa, see http://mimosajs.com
+For more information regarding Mimosa, see http://mimosa.io
 
 ## Usage
 
