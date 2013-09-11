@@ -113,8 +113,11 @@ __startCopy = (copyConfig, howManyFiles, cb) ->
   watchSettings =
     ignored:(file) -> __isExcluded(copyConfig, file)
     persistent:!mimosaConf.isBuild
-    interval:mimosaConf.importSource.interval
-    binaryInterval:mimosaConf.importSource.binaryInterval
+    usePolling:mimosaConf.importSource.usePolling
+
+  if watchSettings.usePolling
+    watchSettings.interval = mimosaConf.importSource.interval
+    watchSettings.binaryInterval = mimosaConf.importSource.binaryInterval
 
   watcher = watch.watch copyConfig.from, watchSettings
   watcher.on "error", (error) ->
