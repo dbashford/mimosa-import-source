@@ -1,6 +1,6 @@
 {
   "name": "mimosa-import-source",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "https://github.com/dbashford/mimosa-import-source",
   "author": "David Bashford",
   "description": "Mimosa module for copying files into the project before building starts",
