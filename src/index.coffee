@@ -130,7 +130,7 @@ __startCopy = (copyConfig, howManyFiles, cb) ->
 __protectDestination = (copyConfig, howManyFiles, cb) ->
   initDone = false
   totalProcessed = 0
-  watcher = watch.watch(copyConfig.to, {persistent:true})
+  watcher = watch.watch(copyConfig.to, {persistent:true, usePolling: mimosaConf.importSource.usePolling})
   watcher.on "error", (error) ->
     logger.warn "File watching error: #{error}"
   watcher.on "all", (dontcare, f) ->
