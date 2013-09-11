@@ -23,14 +23,16 @@ If you attempt to modify a file that has been copied, rather than update the ori
 
 ```
 importSource:
+  usePolling: true
   interval: 500
   binaryInterval: 1000
   copy:[]
 ```
 
-* `copy`: detailed below
-* `interval`: Interval of file system polling, use this if your CPU starts churning to slow down the file watching for import-source.
-* `binaryInterval`: Interval of file system polling for binary files.
+* `usePolling`: Whether to use file system polling. Leave this true on *nix systems, Windows users may want to turn this off for large codebases if CPU usage is high
+* `interval`: Interval of file system polling (if using polling). Use this if your CPU starts churning to slow down the file watching for import-source.
+* `binaryInterval`: Interval of file system polling for binary files (if using polling)
+* `copy`: Detailed below
 
 ## Example Config
 
