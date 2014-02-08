@@ -4,14 +4,16 @@ fs = require 'fs'
 path = require 'path'
 watch = require 'chokidar'
 wrench = require 'wrench'
-logger = require 'logmimosa'
 _ = require "lodash"
 
 config = require './config'
 
 mimosaConf = false
+logger = null
+
 
 registration = (mimosaConfig, register) ->
+  logger = mimosaConfig.log
   mimosaConf = mimosaConfig
 
   register ['preBuild'], 'init', _importSource
@@ -70,7 +72,7 @@ __cleanDirectories = (copyConfig, cb) ->
       if fs.existsSync dirPath
         fs.rmdir dirPath, (err) ->
           if err?.code is not "ENOTEMPTY"
-            logger.error "Unable to delete directory, #{dirPath}"
+            logger.error "Unable to delete directory [[ #{dirPath} ]]"
             logger.error err
           else
             logger.info "mimosa-import-source: Deleted empty directory [[ #{dirPath} ]]"
