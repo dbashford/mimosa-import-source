@@ -13,12 +13,12 @@ exports.placeholder = ->
   """
   \t
 
-    # importSource:
-      # usePolling: true      # Whether to use file system polling; this may eat CPU on windows. Should be set to true on *nix systems
-      # interval: 500         # Interval of file system polling
-      # binaryInterval: 1000  # Interval of file system polling for binary files
-      # copy: []              # An array of folders and or files to copy and where to copy them,
-                              # for more information see https://github.com/dbashford/mimosa-import-source
+    importSource:
+      usePolling: true      # Whether to use file system polling; this may eat CPU on windows. Should be set to true on *nix systems
+      interval: 500         # Interval of file system polling
+      binaryInterval: 1000  # Interval of file system polling for binary files
+      copy: []              # An array of folders and or files to copy and where to copy them,
+                            # for more information see https://github.com/dbashford/mimosa-import-source
 
   """
 
